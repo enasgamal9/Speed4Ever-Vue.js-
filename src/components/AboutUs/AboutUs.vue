@@ -72,6 +72,7 @@
     padding: 50px;
     padding-left: 500px;
     position: relative;
+    text-align: right;
   }
   
   .aboutUsTitle {

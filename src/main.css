@@ -1,9 +1,10 @@
 @font-face {
-    font-family: 'Droid Arabic';
-    src: url('../public/fonts/NotoKufiArabic-VariableFont_wght.ttf') format('truetype');
-  }
-  *{
-    font-family: 'Droid Arabic', sans-serif, Arial;
-    padding: 0;
-    margin: 0;
-  }
+  font-family: "Droid Arabic";
+  src: url("../public/fonts/NotoKufiArabic-VariableFont_wght.ttf")
+    format("truetype");
+}
+* {
+  font-family: "Droid Arabic", sans-serif, Arial;
+  padding: 0;
+  margin: 0;
+}

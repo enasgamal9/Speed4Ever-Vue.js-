@@ -3,9 +3,10 @@
     <Header />
     <AboutUs />
     <Categories />
-    <Products  :title="productsTitle1"/>
+    <Products :title="productsTitle1" />
     <Sale />
-    <Products  :title="productsTitle2"/>
+    <Products :title="productsTitle2" />
+    <Footer />
   </div>
 </template>
 
@@ -15,6 +16,7 @@ import AboutUs from "../../components/AboutUs/AboutUs.vue";
 import Categories from "../../components/Categories/Categories.vue";
 import Products from "../../SharedUI/Products/Products.vue";
 import Sale from "../../components/Sale/Sale.vue";
+import Footer from "../../components/Footer/Footer.vue";
 
 export default {
   name: "HomePage",
@@ -23,13 +25,14 @@ export default {
     AboutUs,
     Categories,
     Products,
-    Sale
+    Sale,
+    Footer,
   },
   data() {
     return {
       productsTitle1: "أحدث المزادات",
-      productsTitle2: "أحدث الإضافات"
+      productsTitle2: "أحدث الإضافات",
     };
-}
-  };
+  },
+};
 </script>

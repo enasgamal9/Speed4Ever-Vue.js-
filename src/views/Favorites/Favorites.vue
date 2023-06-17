@@ -1,38 +1,33 @@
 <template>
+    <div class="titleDiv">
+        <h1>المفضلة</h1>
+    </div>
   <div class="container">
-    <h1>{{ title }}</h1>
+    
     <div class="row">
-      <div
-        class="col-md-3"
-        v-for="product in products.slice(0, 4)"
-        :key="product.id"
-      >
+      <div class="col-md-3" v-for="product in products" :key="product.id">
         <div class="card">
           <img :src="product.thumbnail" class="cardImg" :alt="product.title" />
           <div class="card-body">
             <h5 class="card-title">{{ product.title }}</h5>
             <small class="card-category">{{ product.category }}</small>
             <p class="card-category">{{ product.price }}$</p>
-            <button @click="addToFavorites(product.id)" class="btn btn-primary">
-              Add to Favorites
-            </button>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script>
 import Axios from "../../Axios.js";
+import Footer from "../../components/Footer/Footer.vue";
 
 export default {
-  name: "BestSeller",
-  props: {
-    title: {
-      type: String,
-      required: true,
-    },
+  name: "Favorites",
+  components: {
+    Footer,
   },
   data() {
     return {
@@ -40,6 +35,7 @@ export default {
     };
   },
   mounted() {
+    //myFavourites
     Axios.get("/products")
       .then((response) => {
         console.log(response.data.products);
@@ -49,23 +45,6 @@ export default {
         console.log(error);
       });
   },
-  methods: {
-    addToFavorites(productId) {
-      const requestBody = {
-        product_id: productId,
-      };
-
-      Axios.post("/add-to-fav", requestBody)
-        .then((response) => {
-          console.log("Added to favorites:", response.data);
-          // Handle success response if needed
-        })
-        .catch((error) => {
-          console.log("Error adding to favorites:", error);
-          // Handle error response if needed
-        });
-    },
-  },
 };
 </script>
 
@@ -74,8 +53,17 @@ export default {
   margin-top: 70px;
 }
 
+.titleDiv{
+    background-image: url('../../../public/images/banner.png');
+    background-color: #f7f5ef;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    height: 150px;
+}
+
 h1 {
   text-align: center;
+  padding-top: 50px;
 }
 
 small {

@@ -6,10 +6,8 @@ import { RouterLink, RouterView } from "vue-router";
   <nav>
     <RouterLink to="/">الرئيسية</RouterLink>
     <RouterLink to="/about">من نحن</RouterLink>
-    <RouterLink to="/services">العروض</RouterLink>
-    <RouterLink to="/packages">الباقات</RouterLink>
-    <RouterLink to="/add-ad">إضافة إعلان</RouterLink>
-    <RouterLink to="/login">تسجيل الدخول</RouterLink>
+    <RouterLink to="/favorites">المفضلة</RouterLink>
+    <RouterLink to="/auth">سجل الآن</RouterLink>
   </nav>
   <RouterView></RouterView>
 </template>
@@ -30,13 +28,13 @@ nav a {
   color: black;
   font-size: 16px;
   margin: 0 10px;
-  padding: 5px 10px;
+  padding: 5px 20px;
   border-radius: 4px;
   transition: background-color 0.3s ease;
 }
 
 nav a:hover {
   background-color: #555;
-  color: white
+  color: white;
 }
 </style>

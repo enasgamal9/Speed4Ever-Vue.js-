@@ -1,9 +1,15 @@
 <template>
   <header class="header">
     <div class="socialClass">
-      <a href="#" class="social-icon facebook"><font-awesome-icon :icon="faFacebookF"/></a>
-      <a href="#" class="social-icon twitter"><font-awesome-icon :icon="faTwitter"/></a>
-      <a href="#" class="social-icon instagram"><font-awesome-icon :icon="faInstagram"/></a>
+      <a href="#" class="social-icon facebook"
+        ><font-awesome-icon :icon="faFacebookF"
+      /></a>
+      <a href="#" class="social-icon twitter"
+        ><font-awesome-icon :icon="faTwitter"
+      /></a>
+      <a href="#" class="social-icon instagram"
+        ><font-awesome-icon :icon="faInstagram"
+      /></a>
     </div>
     <div class="thinerHeader">
       <div class="headerContent">
@@ -94,25 +100,25 @@
     border-radius: 0;
     margin-top: 0;
   }
-  
+
   .headerFlex {
     flex-direction: column;
   }
-  
+
   .headerPhoto {
     margin: 0 auto;
     margin-top: 20px;
     margin-bottom: 20px;
   }
-  
+
   .headerTitle {
     font-size: 30px;
   }
-  
+
   .socialClass {
     margin-top: 20px;
   }
-  
+
   .social-icon {
     margin-left: 10px;
     margin-top: 10px;
@@ -122,7 +128,11 @@
 
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faFacebookF, faTwitter, faInstagram } from "@fortawesome/free-brands-svg-icons";
+import {
+  faFacebookF,
+  faTwitter,
+  faInstagram,
+} from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(faFacebookF, faTwitter, faInstagram);
