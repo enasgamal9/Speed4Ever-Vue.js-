@@ -26,7 +26,9 @@
                   <button type="submit" class="authBtn">إرسال</button>
                 </div>
               </form>
-              <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+              <p v-if="errorMessage" class="error-message">
+                {{ errorMessage }}
+              </p>
               <span class="authSpan">
                 تذكرت كلمة المرور؟
                 <a href="/login" class="authConditionLink">تسجيل الدخول</a>

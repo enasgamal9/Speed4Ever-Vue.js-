@@ -11,7 +11,9 @@
                 class="logo"
               />
               <h2 class="card-title">تأكيد الحساب</h2>
-              <p class="card-subtitle">الرجاء إدخال رمز التحقق المكون من 5 أرقام</p>
+              <p class="card-subtitle">
+                الرجاء إدخال رمز التحقق المكون من 5 أرقام
+              </p>
               <form @submit="submitCode">
                 <div>
                   <input
@@ -35,11 +37,15 @@
                   <button type="submit" class="authBtn">تحقق</button>
                 </div>
               </form>
-              <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+              <p v-if="errorMessage" class="error-message">
+                {{ errorMessage }}
+              </p>
               <span class="authSpan">
                 {{ authConditionText }}
                 <a href="#" class="authConditionLink" @click="resendCode">
-                  {{ codeResent ? 'تم إعادة إرسال الكود' : 'إعادة إرسال الكود' }}
+                  {{
+                    codeResent ? "تم إعادة إرسال الكود" : "إعادة إرسال الكود"
+                  }}
                 </a>
               </span>
             </div>
@@ -51,7 +57,7 @@
 </template>
 
 <script>
-import * as Yup from 'yup';
+import * as Yup from "yup";
 import Axios from "../../Axios";
 import { useRouter } from "vue-router";
 
@@ -64,22 +70,28 @@ export default {
       errorMessage: "",
       codeResent: false,
       type: "",
+      device_token: "",
     };
   },
   mounted() {
     this.type = this.getDeviceType();
-    console.log(this.type);
+    this.device_token = this.getDeviceToken();
+    console.log(this.code);
   },
   methods: {
+    getDeviceToken() {
+      return "YOUR_DEVICE_TOKEN";
+    },
     submitCode(event) {
       event.preventDefault();
       const validationSchema = Yup.object().shape({
-        code: Yup.string().required('يجب إدخال رمز التحقق'),
-        phone: Yup.string().required('يجب إدخال رقم الجوال'),
-        type: Yup.string().required('يجب إدخال نوع الجهاز'),
+        code: Yup.string().required("يجب إدخال رمز التحقق"),
+        phone: Yup.string().required("يجب إدخال رقم الجوال"),
+        type: Yup.string().required("يجب إدخال نوع الجهاز"),
       });
 
-      validationSchema.validate({ code: this.code, phone: this.phone, type: this.type }) // Include type in validation
+      validationSchema
+        .validate({ code: this.code, phone: this.phone, type: this.type }) // Include type in validation
         .then(() => {
           Axios.post("/auth/verify", {
             code: this.code,
@@ -94,6 +106,7 @@ export default {
             })
             .catch((error) => {
               console.log("Failed.. " + error);
+              console.log(error.response);
               this.errorMessage = "فشل في التحقق من الكود";
             });
         })
@@ -114,20 +127,22 @@ export default {
         });
     },
     getDeviceType() {
-  const userAgent = navigator.userAgent.toLowerCase();
+      const userAgent = navigator.userAgent.toLowerCase();
 
-  if (userAgent.includes("iphone") || userAgent.includes("ipod")) {
-    return "ios";
-  } else if (userAgent.includes("android")) {
-    return "android";
-  } else if (userAgent.includes("mac") || userAgent.includes("windows") || userAgent.includes("linux")) {
-    return "ios";
-  } else {
-    return "Device type: Unknown";
-  }
-}
-
-
+      if (userAgent.includes("iphone") || userAgent.includes("ipod")) {
+        return "ios";
+      } else if (userAgent.includes("android")) {
+        return "android";
+      } else if (
+        userAgent.includes("mac") ||
+        userAgent.includes("windows") ||
+        userAgent.includes("linux")
+      ) {
+        return "ios";
+      } else {
+        return "Device type: Unknown";
+      }
+    },
   },
 };
 </script>

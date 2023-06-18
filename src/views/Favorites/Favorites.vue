@@ -36,8 +36,8 @@ export default {
   mounted() {
     Axios.get("/myFavourites")
       .then((response) => {
-        console.log(response.data.data.products);
-        this.products = response.data.data.products;
+        console.log(response.data.data);
+        this.products = response.data.data;
       })
       .catch((error) => {
         console.log(error);

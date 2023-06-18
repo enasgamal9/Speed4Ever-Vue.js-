@@ -66,7 +66,7 @@ export default {
         console.log(error);
       });
   },
-  
+
   methods: {
     addToFavorites(product) {
       if (product.isFavorite || product.isAddingToFavorite) {

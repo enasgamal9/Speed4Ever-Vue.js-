@@ -26,7 +26,7 @@ const logout = async () => {
 <template>
   <nav>
     <RouterLink to="/">الرئيسية</RouterLink>
-    <RouterLink to="/favorites">المفضلة</RouterLink>
+    <RouterLink v-if="isLoggedIn" to="/favorites">المفضلة</RouterLink>
     <a v-if="isLoggedIn" @click="logout">تسجيل خروج</a>
     <RouterLink v-else to="/auth">سجل الآن</RouterLink>
   </nav>
