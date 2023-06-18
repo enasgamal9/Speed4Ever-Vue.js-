@@ -8,3 +8,96 @@
   padding: 0;
   margin: 0;
 }
+.containerAuth {
+  background-color: #fbf9f4;
+  height: 100vh;
+  background-image: url("../../../public/images/auth.png");
+  background-repeat: no-repeat;
+  background-size: 30%;
+  background-position-y: 80%;
+  background-position-x: 2%;
+  direction: rtl;
+}
+.formAuth {
+  border-radius: 25px;
+  border-color: white;
+  background-color: white;
+  padding: 15px;
+  margin-bottom: 50px;
+  
+}
+.authInput {
+  border: none;
+  box-shadow: 0 2px 0px rgba(0, 0, 0, 0.043);
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  
+}
+.authBtn {
+  width: 40%;
+  background-color: #6c98a2;
+  border-radius: 50px;
+  border-color: #6c98a2;
+  padding: 10px;
+  font-size: 20px;
+  color: white;
+  border: #6c98a2 solid 1px;
+  margin-left: 30%;
+  margin-top: 25px;
+  margin-bottom: 20px;
+}
+
+.authBtn:hover {
+  color: #6c98a2;
+  background-color: white;
+  border: #6c98a2 solid 1px;
+  
+}
+
+.card-title {
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+
+}
+
+.card-subtitle {
+  font-size: 20px;
+  color: #8d8d8d;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.logo {
+  margin-left: 35%;
+  margin-bottom: 30px;
+}
+
+.authConditionLink {
+  text-decoration: none;
+  color: #6c98a2;
+  font-weight: 600;
+  margin-right: 2%;
+  padding-left: 22%;
+}
+
+.authConditionLink:hover{
+  color: #5f8d97;
+  text-decoration: none;
+}
+
+.error-message {
+  text-align: right;
+  color: red;
+}
+
+.authSpan {
+  color: #6c98a2;
+}
+
+.authSpan:hover {
+  text-decoration: none;
+  color: #618891;
+}

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
-import Axios from "../../Axios.js";
+import Axios from "../../Axios";
 
 let isLoggedIn = false;
 

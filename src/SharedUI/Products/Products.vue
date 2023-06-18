@@ -8,13 +8,23 @@
         :key="product.id"
       >
         <div class="card">
-          <img :src="product.thumbnail" class="cardImg" :alt="product.title" />
+          <img :src="product.main_image" class="cardImg" :alt="product.name" />
           <div class="card-body">
-            <h5 class="card-title">{{ product.title }}</h5>
-            <small class="card-category">{{ product.category }}</small>
-            <p class="card-category">{{ product.price }}$</p>
-            <button @click="addToFavorites(product)" :disabled="product.isFavorite || product.isAddingToFavorite" class="btn btn-primary favBtn">
-              {{ product.isAddingToFavorite ? 'Adding...' : (product.isFavorite ? 'Added to Favorites' : 'Add to Favorites') }}
+            <h5 class="card-title">{{ product.name }}</h5>
+            <small class="card-category">{{ product.category_id }}</small>
+            <p class="card-category">{{ product.product_price }}$</p>
+            <button
+              @click="addToFavorites(product)"
+              :disabled="product.isFavorite || product.isAddingToFavorite"
+              class="btn btn-primary favBtn"
+            >
+              {{
+                product.isAddingToFavorite
+                  ? "Adding..."
+                  : product.isFavorite
+                  ? "Added to Favorites"
+                  : "Add to Favorites"
+              }}
             </button>
           </div>
         </div>
@@ -22,7 +32,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import Axios from "../../Axios.js";
@@ -34,6 +43,10 @@ export default {
       type: String,
       required: true,
     },
+    productsEndpoint: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
@@ -41,12 +54,12 @@ export default {
     };
   },
   mounted() {
-    Axios.get("/products")
+    Axios.get(this.productsEndpoint)
       .then((response) => {
         console.log(response.data.products);
-        this.products = response.data.products.map(product => ({
+        this.products = response.data.products.map((product) => ({
           ...product,
-          isFavorite: false
+          isFavorite: false,
         }));
       })
       .catch((error) => {
@@ -55,34 +68,31 @@ export default {
   },
   methods: {
     addToFavorites(product) {
-  if (product.isFavorite || product.isAddingToFavorite) {
-    console.log("Already added to favorites or in progress");
-    return;
-  }
+      if (product.isFavorite || product.isAddingToFavorite) {
+        console.log("Already added to favorites or in progress");
+        return;
+      }
 
-  product.isAddingToFavorite = true; // Set the isAddingToFavorite property to true
+      product.isAddingToFavorite = true;
 
-  const requestBody = {
-    product_id: product.id,
-  };
+      const requestBody = {
+        product_id: product.id,
+      };
 
-  Axios.post("/add-to-fav", requestBody)
-    .then((response) => {
-      console.log("Added to favorites:", response.data);
-      product.isFavorite = true;
-      product.isAddingToFavorite = false; // Reset the isAddingToFavorite property
-    })
-    .catch((error) => {
-      console.log("Error adding to favorites:", error);
-      product.isAddingToFavorite = false; // Reset the isAddingToFavorite property
-      // Handle error response if needed
-    });
-},
-
+      Axios.post("/add-to-fav", requestBody)
+        .then((response) => {
+          console.log("Added to favorites:", response.data);
+          product.isFavorite = true;
+          product.isAddingToFavorite = false;
+        })
+        .catch((error) => {
+          console.log("Error adding to favorites:", error);
+          product.isAddingToFavorite = false;
+        });
+    },
   },
 };
 </script>
-
 
 <style scoped>
 .container {
@@ -119,12 +129,12 @@ small {
   font-weight: bold;
 }
 
-.favBtn{
-  background-color: #49687C;
+.favBtn {
+  background-color: #49687c;
   border: none;
 }
 
-.favBtn:hover{
+.favBtn:hover {
   background-color: #49687ca9;
   border: none;
 }

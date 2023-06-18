@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const Axios = axios.create({
-	baseURL: "https://dummyjson.com",
+	baseURL: "https://speed4ever.elsaed.aait-d.com/app",
 });
 
 Axios.interceptors.request.use((config) => {

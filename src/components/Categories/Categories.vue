@@ -1,11 +1,11 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-md-3" v-for="product in products" :key="product.id">
+      <div class="col-md-3" v-for="category in categories" :key="category.id">
         <div class="card">
-          <img :src="product.thumbnail" class="cardImg" :alt="product.title" />
+          <img :src="category.thumbnail" class="cardImg" :alt="category.title" />
           <div class="card-body">
-            <h5 class="card-title">{{ product.title }}</h5>
+            <h5 class="card-title">{{ category.title }}</h5>
           </div>
         </div>
       </div>
@@ -20,15 +20,13 @@ export default {
   name: "Categories",
   data() {
     return {
-      products: [],
+      categories: [],
     };
   },
   mounted() {
-    //categories
-    Axios.get("/products")
+    Axios.get("/categories")
       .then((response) => {
-        console.log(response.data.products);
-        this.products = response.data.products;
+        this.categories = response.data.data.categories;
       })
       .catch((error) => {
         console.log(error);

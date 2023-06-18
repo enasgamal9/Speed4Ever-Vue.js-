@@ -6,11 +6,11 @@
     <div class="row">
       <div class="col-md-3" v-for="product in products" :key="product.id">
         <div class="card">
-          <img :src="product.thumbnail" class="cardImg" :alt="product.title" />
+          <img :src="product.main_image" class="cardImg" :alt="product.name" />
           <div class="card-body">
-            <h5 class="card-title">{{ product.title }}</h5>
-            <small class="card-category">{{ product.category }}</small>
-            <p class="card-category">{{ product.price }}$</p>
+            <h5 class="card-title">{{ product.name }}</h5>
+            <small class="card-category">{{ product.category_id }}</small>
+            <p class="card-category">{{ product.product_price }}$</p>
           </div>
         </div>
       </div>
@@ -34,12 +34,10 @@ export default {
     };
   },
   mounted() {
-    //myFavourites
-    Axios.get("/products")
+    Axios.get("/myFavourites")
       .then((response) => {
-        //.data
-        console.log(response.data.products);
-        this.products = response.data.products;
+        console.log(response.data.data.products);
+        this.products = response.data.data.products;
       })
       .catch((error) => {
         console.log(error);

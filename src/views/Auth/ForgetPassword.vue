@@ -1,72 +1,92 @@
 <template>
-  <div>
-    <AuthComponent
-      title="استعادة كلمة المرور"
-      subtitle="من فضلك قم بإدخال رقم الجوال الخاص بك"
-      :inputs="[
-        {
-          id: 'phone',
-          type: 'text',
-          placeholder: 'رقم الجوال',
-          required: true,
-          vModel: phone,
-        },
-      ]"
-      :authSpan="authSpan"
-      button="إرسال"
-      @submit="submitForgetPassword"
-      authConditionText="تذكرت كلمة المرور؟"
-      authConditionLinkText="تسجيل الدخول"
-      authConditionLink="/login"
-    />
-    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+  <div class="containerAuth">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="mt-5 formAuth">
+            <div class="card-body">
+              <img
+                src="../../../public/images/logoWithTitle.svg"
+                alt="Speed4Ever logo"
+                class="logo"
+              />
+              <h2 class="card-title">استعادة كلمة المرور</h2>
+              <p class="card-subtitle">من فضلك قم بإدخال رقم الجوال الخاص بك</p>
+              <form @submit="submitForgetPassword">
+                <div>
+                  <input
+                    type="text"
+                    id="phone"
+                    class="authInput"
+                    placeholder="رقم الجوال"
+                    v-model="phone"
+                  />
+                </div>
+                <div>
+                  <button type="submit" class="authBtn">إرسال</button>
+                </div>
+              </form>
+              <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+              <span class="authSpan">
+                تذكرت كلمة المرور؟
+                <a href="/login" class="authConditionLink">تسجيل الدخول</a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import AuthComponent from "../../SharedUI/AuthUI/AuthUI.vue";
 import Axios from "../../Axios";
 import { useRouter } from "vue-router";
+import * as Yup from "yup";
 
 export default {
   name: "ForgetPasswordPage",
-  components: {
-    AuthComponent,
-  },
   data() {
     return {
       phone: "",
       errorMessage: "",
-      authConditionText: "",
-      authConditionLink: "",
-      authConditionLinkText: "",
     };
   },
   methods: {
-    submitForgetPassword() {
-      Axios.post("/auth/send_code", {
-        phone: this.phone,
-      })
+    submitForgetPassword(event) {
+      event.preventDefault();
+
+      const { phone } = this;
+
+      const forgetPasswordSchema = Yup.object().shape({
+        phone: Yup.string().required("يرجى إدخال رقم الجوال"),
+      });
+
+      forgetPasswordSchema
+        .validate({ phone }, { abortEarly: false })
         .then(() => {
-          this.errorMessage = "";
-          this.$router.push("/resetPassword");
+          Axios.post("/auth/send_code", {
+            phone,
+          })
+            .then(() => {
+              this.errorMessage = "";
+              this.$router.push("/resetPassword");
+            })
+            .catch((error) => {
+              console.log("Failed.. " + error);
+              this.errorMessage = "فشل في إعادة تعيين كلمة المرور";
+            });
         })
         .catch((error) => {
-          console.log("Failed.. " + error);
-          this.errorMessage = "Failed to reset password";
+          if (error.inner) {
+            const errorMessage = error.inner.reduce(
+              (message, innerError) => `${message}${innerError.message}\n`,
+              ""
+            );
+            this.errorMessage = errorMessage.trim();
+          }
         });
-    }
+    },
   },
 };
 </script>
-
-<style>
-.authSpan {
-  color: #6c98a2;
-  margin-left: 2%;
-}
-.authSpan:hover {
-  text-decoration: none;
-  color: #618891;
-}
-</style>

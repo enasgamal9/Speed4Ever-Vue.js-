@@ -1,74 +1,112 @@
 <template>
-  <div>
-    <AuthComponent
-      title="تسجيل دخول إلى حسابك"
-      subtitle="من فضلك قم بتسجيل بياناتك لتسجيل الدخول"
-      :inputs="[
-        { id: 'username', type: 'text', placeholder: 'اسم المستخدم', required: true, vModel: username },
-        { id: 'password', type: 'password', placeholder: 'كلمة المرور', required: true, value: password }
-      ]"
-      :authSpan="authSpan"
-      button="تسجيل دخول"
-      @submit="submitLogin"
-      authConditionText="ليس لديك حساب؟"
-      authConditionLinkText="إنشاء حساب جديد"
-      authConditionLink="/register"
-    />
-    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+  <div class="containerAuth">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="mt-5 formAuth">
+            <div class="card-body">
+              <img
+                src="../../../public/images/logoWithTitle.svg"
+                alt="Speed4Ever logo"
+                class="logo"
+              />
+              <h2 class="card-title">تسجيل دخول إلى حسابك</h2>
+              <p class="card-subtitle">من فضلك قم بتسجيل بياناتك لتسجيل الدخول</p>
+              <form @submit="submitLogin">
+                <div>
+                  <input
+                    type="text"
+                    id="username"
+                    class="authInput"
+                    placeholder="اسم المستخدم"
+                    v-model="formData.username"
+                  />
+                </div>
+                <div>
+                  <input
+                    class="authInput"
+                    type="password"
+                    id="password"
+                    placeholder="كلمة المرور"
+                    v-model="formData.password"
+                  />
+                </div>
+
+                <a href="/forgetPassword" class="authSpan">نسيت كلمة المرور</a>
+                <div>
+                  <button type="submit" class="authBtn">تسجيل دخول</button>
+                </div>
+              </form>
+              <p v-if="errorMessage" class="error-message">
+                {{ errorMessage }}
+              </p>
+              <span class="authSpan">
+                ليس لديك حساب؟
+                <a href="/register" class="authConditionLink">إنشاء حساب جديد</a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import AuthComponent from "../../SharedUI/AuthUI/AuthUI.vue";
 import Axios from "../../Axios";
+import * as Yup from "yup";
 
 export default {
   name: "LoginPage",
-  components: {
-    AuthComponent,
-  },
   data() {
     return {
-      username: "",
-      password: "",
+      formData: {
+        username: "",
+        password: "",
+      },
       errorMessage: "",
-      authConditionText: "",
-      authConditionLink: "",
-      authConditionLinkText: "",
-      authSpan: "<a href='/forgetPassword' class='authSpan'>نسيت كلمة المرور</a>"
     };
   },
   methods: {
-    submitLogin() {
-  console.log('username:', username.value);
-  console.log('password:', password.value);
-  Axios.post("/auth/login", {
-    username: username.value,
-    password: password.value,
-  })
-  .then((response) => {
-    const token = response.data.token;
-    localStorage.setItem("token", token);
-    console.log("Success!");
-    this.errorMessage = "";
-    window.location.href = "/";
-  })
-  .catch((error) => {
-    console.log("Failed.. " + error);
-    this.errorMessage = "Invalid credentials";
-  });
-}
+    submitLogin(event) {
+      event.preventDefault();
+
+      const { username, password } = this.formData;
+
+      const loginSchema = Yup.object().shape({
+        username: Yup.string().required("يرجى إدخال اسم المستخدم"),
+        password: Yup.string().required("يرجى إدخال كلمة المرور"),
+      });
+
+      loginSchema
+        .validate({ username, password }, { abortEarly: false })
+        .then(() => {
+          Axios.post("/auth/login", {
+            username,
+            password,
+          })
+            .then((response) => {
+              const token = response.data.data.token;
+              localStorage.setItem("token", token);
+              console.log("Success!");
+              this.errorMessage = "";
+              window.location.href = "/";
+            })
+            .catch((error) => {
+              console.log("Failed.. " + error);
+              this.errorMessage = "Invalid credentials";
+            });
+        })
+        .catch((error) => {
+          if (error.inner) {
+            const errorMessage = error.inner.reduce(
+              (message, innerError) => `${message}${innerError.message}\n`,
+              ""
+            );
+            this.errorMessage = errorMessage.trim();
+          }
+        });
+    },
   },
 };
 </script>
-
-<style>
-.authSpan{
-  color: #6c98a2;
-  margin-left: 2%;
-}
-.authSpan:hover{
-  text-decoration: none;
-  color: #618891;
-}
-</style>
