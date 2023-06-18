@@ -20,10 +20,10 @@
             >
               {{
                 product.isAddingToFavorite
-                  ? "Adding..."
+                  ? "جار الإضافة.."
                   : product.isFavorite
-                  ? "Added to Favorites"
-                  : "Add to Favorites"
+                  ? "مضاف بالفعل للمفضلة"
+                  : "إضافة إلى المفضلة"
               }}
             </button>
           </div>
@@ -56,8 +56,8 @@ export default {
   mounted() {
     Axios.get(this.productsEndpoint)
       .then((response) => {
-        console.log(response.data.products);
-        this.products = response.data.products.map((product) => ({
+        console.log(response.data.data);
+        this.products = response.data.data.map((product) => ({
           ...product,
           isFavorite: false,
         }));
@@ -66,6 +66,7 @@ export default {
         console.log(error);
       });
   },
+  
   methods: {
     addToFavorites(product) {
       if (product.isFavorite || product.isAddingToFavorite) {

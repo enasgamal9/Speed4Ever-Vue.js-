@@ -63,15 +63,23 @@ export default {
       formData: {
         username: "",
         password: "",
+      type: "",
       },
       errorMessage: "",
     };
   },
+  mounted() {
+    this.formData.device_token = this.getDeviceToken();
+    this.type = this.getDeviceType();
+  },
   methods: {
+    getDeviceToken() {
+      return "YOUR_DEVICE_TOKEN";
+    },
     submitLogin(event) {
       event.preventDefault();
 
-      const { username, password } = this.formData;
+      const { username, password, device_token } = this.formData;
 
       const loginSchema = Yup.object().shape({
         username: Yup.string().required("يرجى إدخال اسم المستخدم"),
@@ -84,6 +92,8 @@ export default {
           Axios.post("/auth/login", {
             username,
             password,
+            device_token: this.type,
+            type: this.type,
           })
             .then((response) => {
               const token = response.data.data.token;
@@ -94,7 +104,7 @@ export default {
             })
             .catch((error) => {
               console.log("Failed.. " + error);
-              this.errorMessage = "Invalid credentials";
+              this.errorMessage = "بيانات غير صحيحة";
             });
         })
         .catch((error) => {
@@ -106,6 +116,23 @@ export default {
             this.errorMessage = errorMessage.trim();
           }
         });
+    },
+    getDeviceType() {
+      const userAgent = navigator.userAgent.toLowerCase();
+
+      if (userAgent.includes("iphone") || userAgent.includes("ipod")) {
+        return "ios";
+      } else if (userAgent.includes("android")) {
+        return "android";
+      } else if (
+        userAgent.includes("mac") ||
+        userAgent.includes("windows") ||
+        userAgent.includes("linux")
+      ) {
+        return "ios";
+      } else {
+        return "Device type: Unknown";
+      }
     },
   },
 };

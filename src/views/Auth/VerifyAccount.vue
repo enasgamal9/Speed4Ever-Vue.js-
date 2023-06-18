@@ -50,7 +50,6 @@
   </div>
 </template>
 
-
 <script>
 import * as Yup from 'yup';
 import Axios from "../../Axios";
@@ -64,7 +63,12 @@ export default {
       phone: "",
       errorMessage: "",
       codeResent: false,
+      type: "",
     };
+  },
+  mounted() {
+    this.type = this.getDeviceType();
+    console.log(this.type);
   },
   methods: {
     submitCode(event) {
@@ -72,16 +76,20 @@ export default {
       const validationSchema = Yup.object().shape({
         code: Yup.string().required('يجب إدخال رمز التحقق'),
         phone: Yup.string().required('يجب إدخال رقم الجوال'),
+        type: Yup.string().required('يجب إدخال نوع الجهاز'),
       });
 
-      validationSchema.validate({ code: this.code, phone: this.phone })
+      validationSchema.validate({ code: this.code, phone: this.phone, type: this.type }) // Include type in validation
         .then(() => {
           Axios.post("/auth/verify", {
             code: this.code,
             phone: this.phone,
+            device_token: this.device_token,
+            type: this.type,
           })
             .then(() => {
               console.log("Code verification successful!");
+              window.location.href("/login");
               this.errorMessage = "";
             })
             .catch((error) => {
@@ -94,7 +102,7 @@ export default {
         });
     },
     resendCode() {
-      Axios.post("/auth/send_code", { phone: this.phone })
+      Axios.post("/auth/send_code", { phone: this.phone, type: this.type }) // Include type in request payload
         .then(() => {
           console.log("Code resent successfully!");
           this.errorMessage = "";
@@ -105,6 +113,21 @@ export default {
           this.errorMessage = "فشل في إعادة إرسال الكود";
         });
     },
+    getDeviceType() {
+  const userAgent = navigator.userAgent.toLowerCase();
+
+  if (userAgent.includes("iphone") || userAgent.includes("ipod")) {
+    return "ios";
+  } else if (userAgent.includes("android")) {
+    return "android";
+  } else if (userAgent.includes("mac") || userAgent.includes("windows") || userAgent.includes("linux")) {
+    return "ios";
+  } else {
+    return "Device type: Unknown";
+  }
+}
+
+
   },
 };
 </script>

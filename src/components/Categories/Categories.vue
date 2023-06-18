@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-3" v-for="category in categories" :key="category.id">
         <div class="card">
-          <img :src="category.thumbnail" class="cardImg" :alt="category.title" />
+          <img :src="category.image" class="cardImg" :alt="category.name" />
           <div class="card-body">
             <h5 class="card-title">{{ category.title }}</h5>
           </div>
@@ -26,7 +26,10 @@ export default {
   mounted() {
     Axios.get("/categories")
       .then((response) => {
-        this.categories = response.data.data.categories;
+        this.categories = response.data.data.map((category) => ({
+          ...category,
+          isFavorite: false,
+        }));
       })
       .catch((error) => {
         console.log(error);
