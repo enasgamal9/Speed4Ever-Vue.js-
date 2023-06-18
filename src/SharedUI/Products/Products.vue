@@ -29,6 +29,9 @@
           </div>
         </div>
       </div>
+      <div v-if="products.length === 0" class="col-md-3">
+        <p style="margin-left:50%">لا توجد عروض الآن</p>
+      </div>
     </div>
   </div>
 </template>

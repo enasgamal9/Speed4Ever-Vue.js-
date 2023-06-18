@@ -11,6 +11,19 @@
             <h5 class="card-title">{{ product.name }}</h5>
             <small class="card-category">{{ product.category_id }}</small>
             <p class="card-category">{{ product.product_price }}$</p>
+            <button
+              @click="removeFromFavorites(product)"
+              :disabled="product.isFavorite || product.isRemovedFromFavorite"
+              class="btn btn-primary favBtn"
+            >
+              {{
+                product.isRemovedFromFavorite
+                  ? "جار الحذف.."
+                  : product.isFavorite
+                  ? "مضاف بالفعل للمفضلة"
+                  : "حذف من المفضلة"
+              }}
+            </button>
           </div>
         </div>
       </div>
@@ -43,7 +56,32 @@ export default {
         console.log(error);
       });
   },
+  methods: {
+    removeFromFavorites(product) {
+      if (product.isFavorite || product.isRemovedFromFavorite) {
+        console.log("Already removed from favorites or in progress");
+        return;
+      }
+
+      product.isRemovedFromFavorite = true;
+
+      const requestBody = {
+        product_id: product.id,
+      };
+
+      Axios.post("/add-to-fav", requestBody)
+        .then((response) => {
+          product.isFavorite = true;
+          product.isRemovedFromFavorite = false;
+          window.location.reload();
+        })
+        .catch((error) => {
+          product.isRemovedFromFavorite = false;
+        });
+    },
+  },
 };
+
 </script>
 
 <style scoped>

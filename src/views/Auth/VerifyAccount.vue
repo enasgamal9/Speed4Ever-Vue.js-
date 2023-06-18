@@ -91,7 +91,7 @@ export default {
       });
 
       validationSchema
-        .validate({ code: this.code, phone: this.phone, type: this.type }) // Include type in validation
+        .validate({ code: this.code, phone: this.phone, type: this.type })
         .then(() => {
           Axios.post("/auth/verify", {
             code: this.code,
@@ -115,7 +115,7 @@ export default {
         });
     },
     resendCode() {
-      Axios.post("/auth/send_code", { phone: this.phone, type: this.type }) // Include type in request payload
+      Axios.post("/auth/send_code", { phone: this.phone, type: this.type })
         .then(() => {
           console.log("Code resent successfully!");
           this.errorMessage = "";
