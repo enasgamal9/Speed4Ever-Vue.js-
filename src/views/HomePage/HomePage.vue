@@ -3,9 +3,10 @@
     <Header />
     <AboutUs />
     <Categories />
-    <Products :title="productsTitle1" />
+    <!--/latest-products    /latest-auctions-->
+    <Products :title="productsTitle1" products-url="/products" />
     <Sale />
-    <Products :title="productsTitle2" />
+    <Products :title="productsTitle2" products-url="/products" />
     <Footer />
   </div>
 </template>

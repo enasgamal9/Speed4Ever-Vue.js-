@@ -39,13 +39,14 @@
       authConditionLinkText="تسجيل دخول"
       authConditionLink="/login"
     />
-    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+    <p v-if="errors.length" class="error-message" v-for="error in errors" :key="error">{{ error }}</p>
   </div>
 </template>
 
 <script>
 import AuthComponent from "../../SharedUI/AuthUI/AuthUI.vue";
 import Axios from "../../Axios";
+import * as yup from 'yup';
 
 export default {
   name: "Registration",
@@ -58,31 +59,44 @@ export default {
       email: "",
       phone: "",
       password: "",
-      errorMessage: "",
-      authConditionText: "",
-      authConditionLink: "",
-      authConditionLinkText: "",
+      errors: [],
     };
   },
   methods: {
     submitRegistration() {
-      Axios.post("/auth/signup", {
+      const schema = yup.object().shape({
+        username: yup.string().required('يرجى إدخال اسم المستخدم'),
+        email: yup.string().email('البريد الإلكتروني غير صالح').required('يرجى إدخال البريد الإلكتروني'),
+        phone: yup.string().required('يرجى إدخال رقم الجوال'),
+        password: yup.string().required('يرجى إدخال كلمة المرور'),
+      });
+
+      schema.validate({
         username: this.username,
         email: this.email,
         phone: this.phone,
         password: this.password,
       })
-        .then((response) => {
-          const token = response.data.token;
-          localStorage.setItem("token", token);
-          console.log("Success!");
-          this.errorMessage = "";
+        .then((values) => {
+          Axios.post("/auth/signup", values)
+            .then((response) => {
+              this.$router.push("/verifyAccount");
+            })
+            .catch((error) => {
+              console.log("Failed.. " + error);
+            });
         })
-        .catch((error) => {
-          console.log("Failed.. " + error);
-          this.errorMessage = "فشل في إنشاء الحساب";
+        .catch((validationErrors) => {
+          this.errors = validationErrors.errors;
         });
     },
   },
 };
 </script>
+<style scoped>
+div{
+  background-color: #FBF9F4;
+  height: 130vh;
+
+}
+</style>

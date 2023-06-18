@@ -51,6 +51,7 @@ export default {
     localStorage.setItem("token", token);
     console.log("Success!");
     this.errorMessage = "";
+    window.location.href = "/";
   })
   .catch((error) => {
     console.log("Failed.. " + error);

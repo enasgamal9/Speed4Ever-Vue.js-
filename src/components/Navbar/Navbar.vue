@@ -1,13 +1,34 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
+import Axios from "../../Axios.js";
+
+let isLoggedIn = false;
+
+// Check if token exists in local storage
+const token = localStorage.getItem("token");
+if (token) {
+  isLoggedIn = true;
+}
+
+// Function to handle logout
+const logout = async () => {
+  try {
+    localStorage.removeItem("token");
+    window.location.reload();
+    await Axios.post("/auth/logout");
+    isLoggedIn = false;
+  } catch (error) {
+    console.error(error);
+  }
+};
 </script>
 
 <template>
   <nav>
     <RouterLink to="/">الرئيسية</RouterLink>
-    <RouterLink to="/about">من نحن</RouterLink>
     <RouterLink to="/favorites">المفضلة</RouterLink>
-    <RouterLink to="/auth">سجل الآن</RouterLink>
+    <a v-if="isLoggedIn" @click="logout">تسجيل خروج</a>
+    <RouterLink v-else to="/auth">سجل الآن</RouterLink>
   </nav>
   <RouterView></RouterView>
 </template>

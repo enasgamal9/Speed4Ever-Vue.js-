@@ -26,6 +26,7 @@
 <script>
 import AuthComponent from "../../SharedUI/AuthUI/AuthUI.vue";
 import Axios from "../../Axios";
+import { useRouter } from "vue-router";
 
 export default {
   name: "ForgetPasswordPage",
@@ -48,23 +49,13 @@ export default {
       })
         .then(() => {
           this.errorMessage = "";
-          this.showSuccessModal();
+          this.$router.push("/resetPassword");
         })
         .catch((error) => {
           console.log("Failed.. " + error);
           this.errorMessage = "Failed to reset password";
         });
-    },
-    showSuccessModal() {
-      // Show the success modal here
-      this.errorMessage = "تم إرسال الكود بنجاح";
-
-      // Wait for 5 seconds and redirect to /codeVerification page
-      setTimeout(() => {
-        this.errorMessage = "";
-        this.$router.push("/codeVerification");
-      }, 5000);
-    },
+    }
   },
 };
 </script>

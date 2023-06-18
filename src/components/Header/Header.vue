@@ -1,39 +1,39 @@
 <template>
   <header class="header">
-    <div class="socialClass">
-      <a href="#" class="social-icon facebook"
-        ><font-awesome-icon :icon="faFacebookF"
-      /></a>
-      <a href="#" class="social-icon twitter"
-        ><font-awesome-icon :icon="faTwitter"
-      /></a>
-      <a href="#" class="social-icon instagram"
-        ><font-awesome-icon :icon="faInstagram"
-      /></a>
+    <div class="social-links">
+      <a href="#" class="social-icon facebook">
+        <FontAwesomeIcon :icon="faFacebookF" />
+      </a>
+      <a href="#" class="social-icon twitter">
+        <FontAwesomeIcon :icon="faTwitter" />
+      </a>
+      <a href="#" class="social-icon instagram">
+        <FontAwesomeIcon :icon="faInstagram" />
+      </a>
     </div>
-    <div class="thinerHeader">
-      <div class="headerContent">
-        <div class="headerFlex">
+    <div class="thin-header">
+      <div class="header-content">
+        <div class="header-flex">
           <img
             src="../../../public/images/header.png"
-            alt="Blue"
-            class="headerPhoto"
+            alt="Speed4Ever Shopping Header Image"
+            class="header-photo"
           />
-          <h1 class="headerTitle">!اشتر الآن</h1>
+          <h1 class="header-title">!اشتر الآن</h1>
         </div>
       </div>
     </div>
   </header>
 </template>
 
-<style>
+<style scoped>
 .header {
   background-color: #fbf9f4;
   width: 100%;
   overflow-x: hidden;
 }
 
-.thinerHeader {
+.thin-header {
   background-color: #edf0f3;
   width: 90%;
   margin-left: 10vw;
@@ -42,17 +42,17 @@
   margin-top: -365px;
 }
 
-.headerFlex {
+.header-flex {
   display: flex;
   align-items: center;
 }
 
-.headerPhoto {
+.header-photo {
   margin-left: 15%;
   margin-right: 15%;
 }
 
-.headerTitle {
+.header-title {
   font-size: 40px;
   font-weight: bold;
   color: black;
@@ -74,48 +74,48 @@
   margin-top: 20px;
 }
 
-.socialClass {
+.social-links {
   margin-top: 200px;
 }
 
 .social-icon.facebook:hover {
-  background-color: #3b5998; /* Facebook blue */
+  background-color: #3b5998;
   color: white;
 }
 
 .social-icon.twitter:hover {
-  background-color: #1da1f2; /* Twitter blue */
+  background-color: #1da1f2;
   color: white;
 }
 
 .social-icon.instagram:hover {
-  background-color: #e1306c; /* Instagram pink */
+  background-color: #e1306c;
   color: white;
 }
 
 @media (max-width: 768px) {
   /* Adjustments for screens up to 768px wide */
-  .thinerHeader {
+  .thin-header {
     margin-left: 0;
     border-radius: 0;
     margin-top: 0;
   }
 
-  .headerFlex {
+  .header-flex {
     flex-direction: column;
   }
 
-  .headerPhoto {
+  .header-photo {
     margin: 0 auto;
     margin-top: 20px;
     margin-bottom: 20px;
   }
 
-  .headerTitle {
+  .header-title {
     font-size: 30px;
   }
 
-  .socialClass {
+  .social-links {
     margin-top: 20px;
   }
 
@@ -134,6 +134,8 @@ import {
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+import headerImage from "@/assets/images/header.png";
 
 library.add(faFacebookF, faTwitter, faInstagram);
 export default {

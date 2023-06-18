@@ -13,8 +13,8 @@
             <h5 class="card-title">{{ product.title }}</h5>
             <small class="card-category">{{ product.category }}</small>
             <p class="card-category">{{ product.price }}$</p>
-            <button @click="addToFavorites(product.id)" class="btn btn-primary">
-              Add to Favorites
+            <button @click="addToFavorites(product)" :disabled="product.isFavorite || product.isAddingToFavorite" class="btn btn-primary favBtn">
+              {{ product.isAddingToFavorite ? 'Adding...' : (product.isFavorite ? 'Added to Favorites' : 'Add to Favorites') }}
             </button>
           </div>
         </div>
@@ -23,11 +23,12 @@
   </div>
 </template>
 
+
 <script>
 import Axios from "../../Axios.js";
 
 export default {
-  name: "BestSeller",
+  name: "Products",
   props: {
     title: {
       type: String,
@@ -43,31 +44,45 @@ export default {
     Axios.get("/products")
       .then((response) => {
         console.log(response.data.products);
-        this.products = response.data.products;
+        this.products = response.data.products.map(product => ({
+          ...product,
+          isFavorite: false
+        }));
       })
       .catch((error) => {
         console.log(error);
       });
   },
   methods: {
-    addToFavorites(productId) {
-      const requestBody = {
-        product_id: productId,
-      };
+    addToFavorites(product) {
+  if (product.isFavorite || product.isAddingToFavorite) {
+    console.log("Already added to favorites or in progress");
+    return;
+  }
 
-      Axios.post("/add-to-fav", requestBody)
-        .then((response) => {
-          console.log("Added to favorites:", response.data);
-          // Handle success response if needed
-        })
-        .catch((error) => {
-          console.log("Error adding to favorites:", error);
-          // Handle error response if needed
-        });
-    },
+  product.isAddingToFavorite = true; // Set the isAddingToFavorite property to true
+
+  const requestBody = {
+    product_id: product.id,
+  };
+
+  Axios.post("/add-to-fav", requestBody)
+    .then((response) => {
+      console.log("Added to favorites:", response.data);
+      product.isFavorite = true;
+      product.isAddingToFavorite = false; // Reset the isAddingToFavorite property
+    })
+    .catch((error) => {
+      console.log("Error adding to favorites:", error);
+      product.isAddingToFavorite = false; // Reset the isAddingToFavorite property
+      // Handle error response if needed
+    });
+},
+
   },
 };
 </script>
+
 
 <style scoped>
 .container {
@@ -102,5 +117,15 @@ small {
   font-size: 16px;
   text-align: center;
   font-weight: bold;
+}
+
+.favBtn{
+  background-color: #49687C;
+  border: none;
+}
+
+.favBtn:hover{
+  background-color: #49687ca9;
+  border: none;
 }
 </style>

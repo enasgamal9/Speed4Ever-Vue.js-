@@ -16,7 +16,6 @@
 
 <script>
 import AuthComponent from "../../SharedUI/AuthUI/AuthUI.vue";
-import Axios from "../../Axios";
 import { useRouter } from "vue-router";
 
 export default {

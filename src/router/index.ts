@@ -2,10 +2,11 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "../views/HomePage/HomePage.vue";
 import LoginPage from "../views/Auth/Login.vue";
 import Registration from "../views/Auth/Registration.vue";
+import VerifyAccount from "../views/Auth/VerifyAccount.vue";
 import AuthPage from "../views/Auth/AuthPage.vue";
 import ForgetPassword from "../views/Auth/ForgetPassword.vue";
-import CodeVerification from "../views/Auth/CodeVerification.vue";
-import Favorites from '../views/Favorites/Favorites.vue'
+import Favorites from "../views/Favorites/Favorites.vue";
+import ResetPassword from "../views/Auth/ResetPassword.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,14 +32,19 @@ const router = createRouter({
       component: Registration,
     },
     {
+      path: "/verifyAccount",
+      name: "verifyAccount",
+      component: VerifyAccount,
+    },
+    {
       path: "/forgetPassword",
       name: "forgetPassword",
       component: ForgetPassword,
     },
     {
-      path: "/codeVerification",
-      name: "codeVerification",
-      component: CodeVerification,
+      path: "/resetPassword",
+      name: "resetPassword",
+      component: ResetPassword,
     },
     {
       path: "/favorites",

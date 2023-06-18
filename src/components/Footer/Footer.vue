@@ -25,14 +25,14 @@
     </div>
     <div class="sectionApp">
       <div class="left-section">
-        <img src="../../../public/images/app.svg" alt="App Icon" width="200" />
+        <img src="../../../public/images/app.svg" alt="Speed4Ever Icon" width="200" />
       </div>
       <div class="right-section">
         <h4>احصل على أفضل العروض من خلال تطبيقنا</h4>
         <div class="app-download">
           <div class="app-buttons">
-            <a href="#"><img src="../../../public/images/appStore.svg" /></a>
-            <a href="#"><img src="../../../public/images/playStore.svg" /></a>
+            <a href="#"><img src="../../../public/images/appStore.svg" alt="Download Speed4Ever appStore" /></a>
+            <a href="#"><img src="../../../public/images/playStore.svg" alt="Download Speed4Ever playStore" /></a>
           </div>
         </div>
       </div>
@@ -54,21 +54,23 @@ export default {
   margin-top: 60px;
   text-align: right;
   padding: 50px;
-}
+  justify-content: space-between;
+}  
 
 .section {
   padding: 20px;
   margin-top: 50px;
+  width: 300px;
 }
+
 
 .section h3 {
   margin-bottom: 10px;
   font-size: 18px;
-  width: 140px;
 }
 
 .section p {
-  width: 300px;
+  flex: 1;
   font-size: 14px;
 }
 
@@ -138,9 +140,8 @@ export default {
   display: flex;
 }
 
-/* Responsive styles */
 
-@media (max-width: 600px) {
+@media (max-width: 1024px) {
   .footer {
     flex-direction: column;
     align-items: center;

@@ -1,7 +1,7 @@
 <template>
   <div class="image-text-container">
     <div class="circularBG"></div>
-    <img src="../../../public/images/sale.png" alt="Image" class="image" />
+    <img src="../../../public/images/sale.png" alt="Sale Speed4Ever" class="image" />
     <div class="text-container">
       <p>خصم هائل</p>
       <h2>مجموعة جديدة</h2>
@@ -77,8 +77,7 @@ export default {
   margin-top: 40px;
 }
 
-/* Responsive adjustments for small screens */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .image-text-container {
     flex-direction: column;
     align-items: flex-start;

@@ -7,7 +7,7 @@
             <div class="card-body">
               <img
                 src="../../../public/images/logoWithTitle.svg"
-                alt="Speed4Ever"
+                alt="Speed4Ever Auth"
                 class="logo"
               />
               <h2 class="card-title text-center">{{ title }}</h2>
@@ -23,7 +23,6 @@
                     class="form-control authInput"
                     :id="input.id"
                     :placeholder="input.placeholder"
-                    :required="input.required"
                     :value="input.vModel"
                     @input="
                       $emit(
@@ -107,6 +106,7 @@ export default {
 <style scoped>
 .containerAuth {
   background-color: #fbf9f4;
+  height: 100vh;
   background-image: url("../../../public/images/auth.png");
   background-repeat: no-repeat;
   background-size: 30%;

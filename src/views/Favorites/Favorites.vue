@@ -1,9 +1,8 @@
 <template>
-    <div class="titleDiv">
-        <h1>المفضلة</h1>
-    </div>
+  <div class="titleDiv">
+    <h1>المفضلة</h1>
+  </div>
   <div class="container">
-    
     <div class="row">
       <div class="col-md-3" v-for="product in products" :key="product.id">
         <div class="card">
@@ -38,6 +37,7 @@ export default {
     //myFavourites
     Axios.get("/products")
       .then((response) => {
+        //.data
         console.log(response.data.products);
         this.products = response.data.products;
       })
@@ -53,12 +53,12 @@ export default {
   margin-top: 70px;
 }
 
-.titleDiv{
-    background-image: url('../../../public/images/banner.png');
-    background-color: #f7f5ef;
-    background-size: 100%;
-    background-repeat: no-repeat;
-    height: 150px;
+.titleDiv {
+  background-image: url("../../../public/images/banner.png");
+  background-color: #f7f5ef;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  height: 150px;
 }
 
 h1 {
