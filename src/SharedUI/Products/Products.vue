@@ -310,7 +310,8 @@ small {
 
 @media (max-width: 770px) {
   .carousel-inner {
-    padding-left: 2%;
+    padding-left: 10%;
+    padding-right: 5%;
   }
   .col-md-3 {
     flex-basis: 5% ;

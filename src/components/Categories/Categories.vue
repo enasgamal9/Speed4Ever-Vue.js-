@@ -108,7 +108,7 @@ export default {
 @media (max-width: 900px) {
   .col-md-3 {
     flex-basis: 50% ;
-    max-width: 50% ;
+    max-width: 50%;
   }
 }
 

@@ -207,4 +207,10 @@ export default {
     align-items: center;
   }
 }
+
+@media (max-width: 900px) {
+  .section{
+    display: none;
+  }
+}
 </style>
