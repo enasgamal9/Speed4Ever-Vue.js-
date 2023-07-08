@@ -21,6 +21,9 @@
                     placeholder="اسم المستخدم"
                     v-model="formData.username"
                   />
+                  <p v-if="errorMessage.username" class="error-message">
+                    {{ errorMessage.username }}
+                  </p>
                 </div>
                 <div>
                   <input
@@ -30,16 +33,18 @@
                     placeholder="كلمة المرور"
                     v-model="formData.password"
                   />
+                  <p v-if="errorMessage.password" class="error-message">
+                    {{ errorMessage.password }}
+                  </p>
                 </div>
-
+                <p v-if="errorMessage.message" class="error-message">
+                  {{ errorMessage.message }}
+                </p>
                 <a href="/forgetPassword" class="authSpan">نسيت كلمة المرور</a>
                 <div>
                   <button type="submit" class="authBtn">تسجيل دخول</button>
                 </div>
               </form>
-              <p v-if="errorMessage" class="error-message">
-                {{ errorMessage }}
-              </p>
               <span class="authSpan">
                 ليس لديك حساب؟
                 <a href="/register" class="authConditionLink">إنشاء حساب جديد</a>
@@ -63,14 +68,18 @@ export default {
       formData: {
         username: "",
         password: "",
-      type: "",
+        type: "",
       },
-      errorMessage: "",
+      errorMessage: {
+        username: "",
+        password: "",
+        message: "",
+      },
     };
   },
   mounted() {
     this.formData.device_token = this.getDeviceToken();
-    this.type = this.getDeviceType();
+    this.formData.type = this.getDeviceType();
   },
   methods: {
     getDeviceToken() {
@@ -92,28 +101,29 @@ export default {
           Axios.post("/auth/login", {
             username,
             password,
-            device_token: this.type,
-            type: this.type,
+            device_token: this.formData.type,
+            type: this.formData.type,
           })
             .then((response) => {
               const token = response.data.data.token;
               localStorage.setItem("token", token);
               console.log("Success!");
-              this.errorMessage = "";
+              this.errorMessage = {};
               window.location.href = "/";
             })
             .catch((error) => {
-              console.log("Failed.. " + error);
-              this.errorMessage = "بيانات غير صحيحة";
+              this.errorMessage.message = "بيانات غير صحيحة";
+              this.errorMessage.username = "";
+            this.errorMessage.password = "";
             });
         })
         .catch((error) => {
+          this.errorMessage = {};
+
           if (error.inner) {
-            const errorMessage = error.inner.reduce(
-              (message, innerError) => `${message}${innerError.message}\n`,
-              ""
-            );
-            this.errorMessage = errorMessage.trim();
+            error.inner.forEach((innerError) => {
+              this.errorMessage[innerError.path] = innerError.message;
+            });
           }
         });
     },

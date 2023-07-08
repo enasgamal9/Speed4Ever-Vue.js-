@@ -5,41 +5,26 @@
         <div class="col-md-6">
           <div class="mt-5 formAuth">
             <div class="card-body">
-              <img
-                src="../../../public/images/logoWithTitle.svg"
-                alt="Speed4Ever logo"
-                class="logo"
-              />
+              <img src="../../../public/images/logoWithTitle.svg" alt="Speed4Ever logo" class="logo" />
               <h2 class="card-title">تأكيد الحساب</h2>
               <p class="card-subtitle">
-                الرجاء إدخال رمز التحقق المكون من 5 أرقام
+                الرجاء إدخال رمز التحقق
               </p>
               <form @submit="submitCode">
                 <div>
-                  <input
-                    type="text"
-                    id="phone"
-                    class="authInput"
-                    placeholder="رقم الجوال"
-                    v-model="phone"
-                  />
+                  <input type="text" id="phone" class="authInput" placeholder="رقم الجوال" v-model="phone" />
                 </div>
                 <div>
-                  <input
-                    type="text"
-                    id="code"
-                    class="authInput"
-                    placeholder="رمز التحقق"
-                    v-model="code"
-                  />
+                  <input type="text" id="code" class="authInput" placeholder="رمز التحقق" v-model="code" />
                 </div>
+                <p v-if="errorMessage" class="error-message">
+                  {{ errorMessage }}
+                </p>
                 <div>
                   <button type="submit" class="authBtn">تحقق</button>
                 </div>
               </form>
-              <p v-if="errorMessage" class="error-message">
-                {{ errorMessage }}
-              </p>
+
               <span class="authSpan">
                 {{ authConditionText }}
                 <a href="#" class="authConditionLink" @click="resendCode">
@@ -60,6 +45,7 @@
 import * as Yup from "yup";
 import Axios from "../../Axios";
 import { useRouter } from "vue-router";
+import Swal from "sweetalert2";
 
 export default {
   name: "VerifyAccountPage",
@@ -100,28 +86,45 @@ export default {
             type: this.type,
           })
             .then(() => {
-              console.log("Code verification successful!");
-              window.location.href("/login");
+              Swal.fire({
+                title: "تم تأكيد حسابك بنجاح!",
+                text: "قم الآن بتسجيل الدخول",
+                icon: "success",
+                confirmButtonText: "حسنًا",
+              }).then(() => {
+                this.$router.push("/login");
+              });
+
               this.errorMessage = "";
             })
+
             .catch((error) => {
               console.log("Failed.. " + error);
               console.log(error.response);
-              this.errorMessage = "فشل في التحقق من الكود";
+              this.errorMessage = "بيانات غير صحيحة";
             });
         })
         .catch((validationErrors) => {
           this.errorMessage = validationErrors.errors[0];
+
         });
     },
     resendCode() {
       Axios.post("/auth/send_code", { phone: this.phone, type: this.type })
         .then(() => {
-          console.log("Code resent successfully!");
+          Swal.fire({
+            icon: 'success',
+            title: 'تم إرسال الكود بنجاح',
+          });
           this.errorMessage = "";
           this.codeResent = true;
         })
         .catch((error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'فشل في إعادة إرسال الكود',
+            text: 'تأكد من إدخال رقم الهاتف الخاص بحسابك بشكل صحيح',
+          });
           console.log("Failed to resend code.. " + error);
           this.errorMessage = "فشل في إعادة إرسال الكود";
         });

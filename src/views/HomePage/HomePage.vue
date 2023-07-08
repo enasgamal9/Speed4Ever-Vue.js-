@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="homePageClass">
     <Header />
     <AboutUs />
     <Categories />
@@ -36,3 +36,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+  .homePageClass{
+      background-color: #FBF9F4;
+
+  }
+</style>

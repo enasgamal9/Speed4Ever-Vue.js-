@@ -59,60 +59,79 @@ export default {
   color: white;
 }
 
-.text-container > h2 {
+.text-container>h2 {
   font-size: 40px;
   margin-bottom: 10px;
   font-weight: 600;
 }
 
-.text-container > p {
+.text-container>p {
   font-size: 22px;
   font-weight: 100;
   margin-left: 35%;
 }
 
-.text-container > h5 {
+.text-container>h5 {
   font-size: 22px;
   font-weight: 300;
   margin-top: 40px;
 }
 
 @media (max-width: 900px) {
+  .image {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 750px) {
   .image-text-container {
-    flex-direction: column;
     align-items: flex-start;
   }
 
   .image {
     margin-left: 0;
     margin-bottom: 20px;
+    width: 50%;
   }
 
   .circularBG {
-    width: 300px;
-    height: 300px;
+    width: 200px;
+    height: 200px;
+    top: 70px;
     left: 0;
-    right: 0;
+    right: 20px;
     margin: auto;
   }
 
   .text-container {
     margin-left: 0;
     text-align: center;
+    z-index: 2;
   }
 
-  .text-container > h2 {
-    font-size: 32px;
-  }
-
-  .text-container > p,
-  .text-container > h5 {
+  .text-container>p,
+  .text-container>h5 {
     font-size: 18px;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    margin-left: 0;
   }
 
-  .text-container > h5 {
+  .text-container>p {
+    font-size: 22px;
+  }
+
+  .text-container>h2 {
+    font-size: 40px;
+    margin-bottom: 10px;
+    font-weight: 600;
     margin-left: 0;
-    margin-top: 20px;
+  }
+
+  .text-container>h5 {
+    font-size: 22px;
+    font-weight: 300;
+    margin-top: 40px;
   }
 }
 </style>

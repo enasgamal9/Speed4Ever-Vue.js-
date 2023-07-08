@@ -22,13 +22,14 @@
                     v-model="phone"
                   />
                 </div>
+                <p v-if="errorMessage" class="error-message">
+                  {{ errorMessage }}
+                </p>
                 <div>
                   <button type="submit" class="authBtn">إرسال</button>
                 </div>
               </form>
-              <p v-if="errorMessage" class="error-message">
-                {{ errorMessage }}
-              </p>
+              
               <span class="authSpan">
                 تذكرت كلمة المرور؟
                 <a href="/login" class="authConditionLink">تسجيل الدخول</a>
@@ -42,6 +43,7 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2';
 import Axios from "../../Axios";
 import { useRouter } from "vue-router";
 import * as Yup from "yup";
@@ -56,39 +58,48 @@ export default {
   },
   methods: {
     submitForgetPassword(event) {
-      event.preventDefault();
+  event.preventDefault();
 
-      const { phone } = this;
+  const { phone } = this;
 
-      const forgetPasswordSchema = Yup.object().shape({
-        phone: Yup.string().required("يرجى إدخال رقم الجوال"),
-      });
+  const forgetPasswordSchema = Yup.object().shape({
+    phone: Yup.string().required("يرجى إدخال رقم الجوال"),
+  });
 
-      forgetPasswordSchema
-        .validate({ phone }, { abortEarly: false })
+  forgetPasswordSchema
+    .validate({ phone }, { abortEarly: false })
+    .then(() => {
+      Axios.post("/auth/send_code", {
+        phone,
+      })
         .then(() => {
-          Axios.post("/auth/send_code", {
-            phone,
-          })
-            .then(() => {
-              this.errorMessage = "";
-              this.$router.push("/resetPassword");
-            })
-            .catch((error) => {
-              console.log("Failed.. " + error);
-              this.errorMessage = "فشل في إعادة تعيين كلمة المرور";
-            });
+          this.errorMessage = "";
+          // Store the phone number in local storage
+          localStorage.setItem("phone", phone);
+          Swal.fire({
+            icon: 'success',
+            text: 'تم إرسال كود إلى هاتفك برجاء التحقق منه ثم التوجه لصفحة تغيير كلمة المرور',
+            confirmButtonText: 'حسنًا',
+          }).then(() => {
+            this.$router.push("/resetPassword");
+          });
         })
         .catch((error) => {
-          if (error.inner) {
-            const errorMessage = error.inner.reduce(
-              (message, innerError) => `${message}${innerError.message}\n`,
-              ""
-            );
-            this.errorMessage = errorMessage.trim();
-          }
+          console.log("Failed.. " + error);
+          this.errorMessage = "يرجى إدخال رقم الجوال الخاص بحسابك بشكل صحيح";
         });
-    },
+    })
+    .catch((error) => {
+      if (error.inner) {
+        const errorMessage = error.inner.reduce(
+          (message, innerError) => `${message}${innerError.message}\n`,
+          ""
+        );
+        this.errorMessage = errorMessage.trim();
+      }
+    });
+},
+
   },
 };
 </script>

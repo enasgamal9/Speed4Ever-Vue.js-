@@ -24,7 +24,6 @@
   background-color: white;
   padding: 15px;
   margin-bottom: 50px;
-  
 }
 .authInput {
   border: none;
@@ -43,7 +42,7 @@
   font-size: 20px;
   color: white;
   border: #6c98a2 solid 1px;
-  margin-left: 30%;
+  margin-right: 30%;
   margin-top: 25px;
   margin-bottom: 20px;
 }
@@ -71,7 +70,7 @@
 }
 
 .logo {
-  margin-left: 35%;
+  margin-right: 32%;
   margin-bottom: 30px;
 }
 
@@ -91,6 +90,8 @@
 .error-message {
   text-align: right;
   color: red;
+  font-size: 13px;
+  margin-top: -15px;
 }
 
 .authSpan {

@@ -59,7 +59,7 @@ export default {
   max-width: 35%;
   border-radius: 20px;
   position: absolute;
-  top: 130%;
+  top: 105%;
   left: 10%;
   transition: transform 0.2s ease-in-out;
 }
@@ -98,14 +98,7 @@ export default {
   }
 
   .aboutUsImage {
-    max-width: 100%;
-    position: static;
-    margin-bottom: 20px;
-    transition: transform 0.2s ease-in-out;
-  }
-
-  .aboutUsImage:hover {
-    transform: scale(1.05);
+    display: none;
   }
 
   .aboutUsContent {

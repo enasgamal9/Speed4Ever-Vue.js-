@@ -11,17 +11,10 @@
                 class="logo"
               />
               <h2 class="card-title">إعادة تعيين كلمة المرور</h2>
-              <p class="card-subtitle">من فضلك قم بإدخال رقم الجوال وكلمة المرور الجديدة والكود</p>
+              <p class="card-subtitle">
+                من فضلك قم بإدخال كلمة المرور الجديدة والكود
+              </p>
               <form @submit="submitResetPassword">
-                <div>
-                  <input
-                    type="text"
-                    id="phone"
-                    class="authInput"
-                    placeholder="رقم الجوال"
-                    v-model="phone"
-                  />
-                </div>
                 <div>
                   <input
                     type="password"
@@ -30,6 +23,9 @@
                     placeholder="كلمة المرور الجديدة"
                     v-model="password"
                   />
+                  <p v-if="passwordError" class="error-message">
+                    {{ passwordError }}
+                  </p>
                 </div>
                 <div>
                   <input
@@ -39,12 +35,15 @@
                     placeholder="الكود"
                     v-model="code"
                   />
+                  <p v-if="codeError" class="error-message">{{ codeError }}</p>
                 </div>
+                <p v-if="errorMessage" class="error-message">
+                  {{ errorMessage }}
+                </p>
                 <div>
                   <button type="submit" class="authBtn">إرسال</button>
                 </div>
               </form>
-              <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
               <span class="authSpan">
                 تذكرت كلمة المرور؟
                 <a href="/login" class="authConditionLink">تسجيل الدخول</a>
@@ -58,6 +57,7 @@
 </template>
 
 <script>
+import Swal from "sweetalert2";
 import Axios from "../../Axios";
 import { useRouter } from "vue-router";
 import * as Yup from "yup";
@@ -66,9 +66,10 @@ export default {
   name: "ResetPasswordPage",
   data() {
     return {
-      phone: "",
       password: "",
       code: "",
+      passwordError: "",
+      codeError: "",
       errorMessage: "",
     };
   },
@@ -76,17 +77,23 @@ export default {
     submitResetPassword(event) {
       event.preventDefault();
 
-      const { phone, password, code } = this;
+      const phone = localStorage.getItem("phone");
+      const { password, code } = this;
 
       const resetPasswordSchema = Yup.object().shape({
-        phone: Yup.string().required("يرجى إدخال رقم الجوال"),
-        password: Yup.string().required("يرجى إدخال كلمة المرور الجديدة"),
+        password: Yup.string()
+          .matches(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,}$/,
+            "يجب أن تحتوي كلمة المرور على حرف صغير وحرف كبير وحرف خاص ورقم وأن تكون 8 أحرف على الأقل"
+          )
+          .required("يرجى إدخال كلمة المرور"),
         code: Yup.string().required("يرجى إدخال الكود"),
       });
 
       resetPasswordSchema
-        .validate({ phone, password, code }, { abortEarly: false })
+        .validate({ password, code }, { abortEarly: false })
         .then(() => {
+          // Validation successful
           Axios.post("/auth/reset_password", {
             phone,
             password,
@@ -94,20 +101,32 @@ export default {
           })
             .then(() => {
               this.errorMessage = "";
-              this.$router.push("/login");
+              Swal.fire({
+                icon: "success",
+                title: "تم تغيير كلمة المرور بنجاح",
+              }).then(() => {
+                localStorage.removeItem("phone");
+                this.$router.push("/login");
+              });
             })
             .catch((error) => {
               console.log("Failed.. " + error);
-              this.errorMessage = "فشل في إعادة تعيين كلمة المرور";
+              this.errorMessage =
+                "فشل في إعادة تعيين كلمة المرور، تحقق من الكود مرة أخرى";
+              this.codeError="";
+              this.passwordError="";
             });
         })
         .catch((error) => {
           if (error.inner) {
-            const errorMessage = error.inner.reduce(
-              (message, innerError) => `${message}${innerError.message}\n`,
-              ""
-            );
-            this.errorMessage = errorMessage.trim();
+            // Validation failed
+            const errorMessages = error.inner.reduce((messages, innerError) => {
+              messages[innerError.path] = innerError.message;
+              return messages;
+            }, {});
+            this.passwordError = errorMessages["password"] || "";
+            this.codeError = errorMessages["code"] || "";
+            this.errorMessage ="";
           }
         });
     },

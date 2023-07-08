@@ -12,19 +12,130 @@
       </a>
     </div>
     <div class="thin-header">
-      <div class="header-content">
-        <div class="header-flex">
-          <img
-            src="../../../public/images/header.png"
-            alt="Speed4Ever Shopping Header Image"
-            class="header-photo"
-          />
-          <h1 class="header-title">!اشتر الآن</h1>
+      <div
+        id="carouselExample"
+        class="carousel slide"
+        data-bs-ride="carousel"
+      >
+        <ol class="carousel-indicators">
+          <li
+            data-bs-target="#carouselExample"
+            v-for="(image, index) in sliderImages"
+            :key="index"
+            :data-bs-slide-to="index"
+            :class="{ active: index === currentIndex }"
+          ></li>
+        </ol>
+        <div class="carousel-inner">
+          <div
+            class="carousel-item"
+            v-for="(image, index) in sliderImages"
+            :key="index"
+            :class="{ active: index === currentIndex }"
+          >
+            <img
+              :src="image.image"
+              class="d-block w-100"
+              :alt="image.name"
+            />
+            <div class="carousel-caption">
+              <h3>{{ image.name }}</h3>
+            </div>
+          </div>
         </div>
+        <a
+          class="carousel-control-prev"
+          href="#carouselExample"
+          role="button"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </a>
+        <a
+          class="carousel-control-next"
+          href="#carouselExample"
+          role="button"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </a>
       </div>
     </div>
   </header>
 </template>
+
+<script>
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faFacebookF,
+  faTwitter,
+  faInstagram,
+} from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import Axios from "../../Axios.js";
+
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap/dist/js/bootstrap.js";
+
+library.add(faFacebookF, faTwitter, faInstagram);
+
+export default {
+  name: "Header",
+  components: {
+    FontAwesomeIcon,
+  },
+  data() {
+    return {
+      faFacebookF: faFacebookF,
+      faTwitter: faTwitter,
+      faInstagram: faInstagram,
+      sliderImages: [],
+      currentIndex: 0,
+      intervalId: null,
+    };
+  },
+  computed: {
+    currentImage() {
+      return this.sliderImages.length > 0
+        ? this.sliderImages[this.currentIndex].image
+        : "";
+    }
+  },
+  created() {
+    this.fetchSliderData();
+  },
+  mounted() {
+    this.$nextTick(() => {
+      new bootstrap.Carousel(document.getElementById("carouselExample"));
+    });
+  },
+  beforeDestroy() {
+    clearInterval(this.intervalId);
+  },
+  methods: {
+    fetchSliderData() {
+      Axios.get("/slider")
+        .then((response) => {
+          this.sliderImages = response.data.data.slice(1,);
+          this.startSlider();
+        })
+        .catch((error) => {
+          console.error("Failed to fetch slider data:", error);
+        });
+    },
+    startSlider() {
+      this.intervalId = setInterval(() => {
+        this.currentIndex = (this.currentIndex + 1) % this.sliderImages.length;
+      }, 3000);
+    },
+    stopSlider() {
+      clearInterval(this.intervalId);
+    },
+  },
+};
+</script>
 
 <style scoped>
 .header {
@@ -47,10 +158,6 @@
   align-items: center;
 }
 
-.header-photo {
-  margin-left: 15%;
-  margin-right: 15%;
-}
 
 .header-title {
   font-size: 40px;
@@ -76,6 +183,7 @@
 
 .social-links {
   margin-top: 200px;
+  
 }
 
 .social-icon.facebook:hover {
@@ -94,7 +202,9 @@
 }
 
 @media (max-width: 768px) {
-  /* Adjustments for screens up to 768px wide */
+  .header{
+    display: flex;
+  }
   .thin-header {
     margin-left: 0;
     border-radius: 0;
@@ -123,32 +233,8 @@
     margin-left: 10px;
     margin-top: 10px;
   }
+  .sliderImg{
+    border-top-left-radius: 25px !important;
+  }
 }
 </style>
-
-<script>
-import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faFacebookF,
-  faTwitter,
-  faInstagram,
-} from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-
-import headerImage from "@/assets/images/header.png";
-
-library.add(faFacebookF, faTwitter, faInstagram);
-export default {
-  name: "Header",
-  components: {
-    FontAwesomeIcon,
-  },
-  data() {
-    return {
-      faFacebookF: faFacebookF,
-      faTwitter: faTwitter,
-      faInstagram: faInstagram,
-    };
-  },
-};
-</script>

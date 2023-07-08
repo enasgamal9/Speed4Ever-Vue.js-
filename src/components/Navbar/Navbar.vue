@@ -27,7 +27,15 @@ const logout = async () => {
   <nav>
     <RouterLink to="/">الرئيسية</RouterLink>
     <RouterLink v-if="isLoggedIn" to="/favorites">المفضلة</RouterLink>
-    <a v-if="isLoggedIn" @click="logout">تسجيل خروج</a>
+    <a
+      v-if="isLoggedIn"
+      @click="logout"
+      style="cursor: pointer; color: black"
+      onmouseover="this.style.color='white';"
+      onmouseout="this.style.color='black';"
+    >
+      تسجيل خروج
+    </a>
     <RouterLink v-else to="/auth">سجل الآن</RouterLink>
   </nav>
   <RouterView></RouterView>
